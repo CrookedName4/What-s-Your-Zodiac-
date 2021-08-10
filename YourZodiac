@@ -1,0 +1,237 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>USQ CSC1401 S2 2021 Celestial 1</title>
+    <script>
+      // -------------  Constants ----------------
+
+      const SECONDS_PER_YEAR = 31557600;
+      const SECONDS_PER_DAY = 60 * 60 * 24;
+      const MILLISECONDS_PER_SECOND = 1000;
+
+      const PROMPT_DAY_OF_BIRTH = "Enter day of birth";
+      const PROMPT_MONTH_OF_BIRTH = "Enter month of birth";
+      const PROMPT_YEAR_OF_BIRTH = "Enter year of birth";
+
+      const MONTH_NAME = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ];
+
+      const SHORT_MONTH_NAME = [
+        "jan",
+        "feb",
+        "mar",
+        "apr",
+        "may",
+        "jun",
+        "jul",
+        "aug",
+        "sep",
+        "oct",
+        "nov",
+        "dec",
+      ];
+
+      const ZODIAC_DAY_MONTH = [
+        [
+          9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 10, 10, 10,
+          10, 10, 10, 10, 10, 10, 10, 10, 10,
+        ],
+        [
+          10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
+          10, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11,
+        ],
+        [
+          11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11,
+          11, 11, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        ],
+        [
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1,
+          1, 1, 1, 1, 1, 1, 1,
+        ],
+        [
+          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2,
+          2, 2, 2, 2, 2, 2, 2, 2,
+        ],
+        [
+          2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3,
+          3, 3, 3, 3, 3, 3, 3,
+        ],
+        [
+          3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4,
+          4, 4, 4, 4, 4, 4, 4, 4,
+        ],
+        [
+          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5,
+          5, 5, 5, 5, 5, 5, 5, 5,
+        ],
+        [
+          5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6,
+          6, 6, 6, 6, 6, 6, 6,
+        ],
+        [
+          6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+          7, 7, 7, 7, 7, 7, 7, 7,
+        ],
+        [
+          7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8,
+          8, 8, 8, 8, 8, 8, 8,
+        ],
+        [
+          8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 9, 9,
+          9, 9, 9, 9, 9, 9, 9, 9,
+        ],
+      ];
+
+      const ZODIAC_NAME = [
+        "Aries",
+        "Taurus",
+        "Gemini",
+        "Cancer",
+        "Leo",
+        "Virgo",
+        "Libra",
+        "Scorpio",
+        "Sagittarius",
+        "Capricorn",
+        "Aquarius",
+        "Pisces",
+      ];
+
+      const ZODIAC_RULER = [
+        "Mars",
+        "Venus and Ceres",
+        "Mercury",
+        "The Moon",
+        "The Sun",
+        "Chiron and Mercury",
+        "Venus",
+        "Pluto and Mars",
+        "Jupiter",
+        "Saturn",
+        "Uranus and Saturn",
+        "Neptune and Jupiter",
+      ];
+
+      const ZODIAC_IMG = [
+        "https://tau.usq.edu.au/staff/braithwaite/Courses/CSC1401/Zodiac/aries.png",
+        "https://tau.usq.edu.au/staff/braithwaite/Courses/CSC1401/Zodiac/taurus.png",
+        "https://tau.usq.edu.au/staff/braithwaite/Courses/CSC1401/Zodiac/gemini.png",
+        "https://tau.usq.edu.au/staff/braithwaite/Courses/CSC1401/Zodiac/cancer.png",
+        "https://tau.usq.edu.au/staff/braithwaite/Courses/CSC1401/Zodiac/leo.png",
+        "https://tau.usq.edu.au/staff/braithwaite/Courses/CSC1401/Zodiac/virgo.png",
+        "https://tau.usq.edu.au/staff/braithwaite/Courses/CSC1401/Zodiac/libra.png",
+        "https://tau.usq.edu.au/staff/braithwaite/Courses/CSC1401/Zodiac/scorpio.png",
+        "https://tau.usq.edu.au/staff/braithwaite/Courses/CSC1401/Zodiac/sagittarius.png",
+        "https://tau.usq.edu.au/staff/braithwaite/Courses/CSC1401/Zodiac/capricorn.png",
+        "https://tau.usq.edu.au/staff/braithwaite/Courses/CSC1401/Zodiac/aquarius.png",
+        "https://tau.usq.edu.au/staff/braithwaite/Courses/CSC1401/Zodiac/pisces.png",
+      ];
+
+      // -------------  Variable Declarations ----------------
+
+      // -----------  Input -------------
+
+      //Obtaining the user's date of birth
+
+      //Obtain the user's day of birth.
+      var birthDay = prompt(PROMPT_DAY_OF_BIRTH); //takes the user's day of birth
+      var birthDayNumber = Number(birthDay); //converts input from string to number to construct date object
+
+      // Obtain the user's birth month, truncate, convert to lower case.
+      var birthMonth = prompt(PROMPT_MONTH_OF_BIRTH); //takes the user's input as a string - assumes the user types the full month name
+      var truncBirthMonth = birthMonth.substring(0, 3); //truncates the string to 3 letters
+      var truncLowercaseBirthMonth = truncBirthMonth.toLowerCase(); //converts to lowercase
+      var birthMonthIndex = SHORT_MONTH_NAME.indexOf(truncLowercaseBirthMonth); //obtains the index of the birth month from the short month name array
+
+      // Obtain the user's year of birth.
+      var birthYear = prompt(PROMPT_YEAR_OF_BIRTH); //takes the user's year of birth
+      var birthYearNumber = Number(birthYear);
+
+      // -----------  Calculations -------------
+
+      //Date of birth as an object
+
+      let dateOfBirth = new Date(
+        birthYearNumber,
+        birthMonthIndex,
+        birthDayNumber
+      );
+
+      //Current date object
+      var currentDate = new Date();
+
+      //Calculating the age of the user
+      var userAgeMS = currentDate - dateOfBirth; //user age in milliseconds
+      var userAgeSec = userAgeMS / MILLISECONDS_PER_SECOND; //user age in seconds
+      var userAgeYear = Math.floor(userAgeSec / SECONDS_PER_YEAR); //user age in years (without decimals)
+      var userAgeYearString = userAgeYear.toString(); //convert the age in years to a string so the final calulation doesn't add them together
+      var userAgeYearDecimal = userAgeSec / SECONDS_PER_YEAR; //user age in years (with decimals)
+      var userAgeYearRemainder = userAgeYearDecimal - userAgeYear; //remainder age in years
+      var userAgeYearDayRemainder = Math.floor(userAgeYearRemainder * 365); //remainder age in days
+
+      var userAge =
+        userAgeYearString +
+        " Years and " +
+        userAgeYearDayRemainder +
+        " days old!"; //age of the user in years and days
+
+      //Zodiac Information - Pulls information from arrays provided using information from user's input
+      var zodiacDay = ZODIAC_DAY_MONTH[birthMonthIndex];
+      var zodiacImageRuler = zodiacDay[birthDayNumber - 1];
+      var zodiacName = ZODIAC_NAME[zodiacImageRuler];
+      var zodiacRuler = ZODIAC_RULER[zodiacImageRuler];
+      var zodiacImage = ZODIAC_IMG[zodiacImageRuler];
+
+      // ------------- Output ------------------
+
+      //Adding what the user inputted so they can check to confirm they inputted the correct information
+      document.write(
+        "You have entered: " +
+          " " +
+          birthDay +
+          " " +
+          MONTH_NAME[birthMonthIndex] +
+          " " +
+          birthYear +
+          " <br/>"
+      );
+
+      document.write("That means you are " + userAge + "<br/>" + "<br/>");
+
+      //Output Zodiac information in a table
+      document.writeln('<table border="1">');
+
+      document.writeln("<tr>");
+      document.writeln("<td>Zodiac Sign</td>");
+      document.writeln("<td>" + zodiacName + "</td>");
+      document.writeln("</tr>");
+
+      document.writeln("<tr>");
+      document.writeln("<td>Zodiac Rulers</td>");
+      document.writeln("<td>" + zodiacRuler + "</td>");
+      document.writeln("</tr>");
+
+      document.writeln("<tr>");
+      document.writeln("<td>Zodiac Image</td>");
+      document.writeln("<td>" + "<img src=" + zodiacImage + ">" + "</td>");
+      document.writeln("</tr>");
+
+      document.writeln("</table>");
+    </script>
+  </head>
+  <body>
+    <!-- Not much to see here. -->
+  </body>
+</html>
